@@ -13,7 +13,12 @@ class UsersController < ApplicationController
   end
 
   def show
-  	@user = User.find(params[:id])
+    @current_user ||= User.find_by(id: session[:user_id])
+    @user = User.find(params[:id])
+
+    if @current_user != @user
+      redirect_to @current_user #:text => @current_user.username + " is not allowed access to this user"
+    end
   end
 
   private
